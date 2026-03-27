@@ -71,6 +71,47 @@ canvas {
     margin-bottom: 20px;
 }
 
+/* Container de Escolha de Personagem */
+.character-select-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    margin-top: 15px;
+}
+
+.char-card {
+    background: #444;
+    border: 3px solid #666;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.char-card.selected {
+    border-color: #4CAF50;
+    background: #3a5a3a;
+    transform: scale(1.05);
+}
+
+.char-img-box {
+    width: 80px;
+    height: 80px;
+    background: #222;
+    margin: 0 auto 10px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.char-img-box img {
+    max-width: 100%;
+    max-height: 100%;
+    image-rendering: pixelated;
+}
+
 .btn {
     background-color: #4CAF50;
     color: white;

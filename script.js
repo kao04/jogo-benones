@@ -9,17 +9,26 @@ const CONFIG_ASSETS = {
     // 1. Background do mapa (Imagem do chão/cenário)
     MAP_BG_URL: '',
     
-    // 2. Sprite do Jogador (Imagem do personagem no mapa)
+    // 2. Sprite do Jogador (Normal)
     PLAYER_SPRITE_URL: '',
     
-    // 3. Sprite do Item Óculos (Pequena imagem de óculos para ser coletada)
+    // 3. Sprite do Jogador (COM ÓCULOS) - Muda automaticamente quando coletar!
+    PLAYER_WITH_GLASSES_SPRITE_URL: '',
+    
+    // 4. Sprite do Item Óculos (Pequena imagem de óculos para ser coletada)
     GLASSES_SPRITE_URL: '',
     
-    // 4. Sprite do Item Pano (Pequena imagem de pano para ser coletada)
+    // 5. Sprite do Item Pano (Pequena imagem de pano para ser coletada)
     CLOTH_SPRITE_URL: '',
     
-    // 5. Foto de Perfil do Personagem (Mostrada grandona no Inventário)
-    PLAYER_PORTRAIT_URL: ''
+    // 6. Foto de Perfil do Personagem (Inventário Normal)
+    PLAYER_PORTRAIT_URL: '',
+    
+    // 7. Foto de Perfil do Personagem (Inventário COM ÓCULOS)
+    PLAYER_PORTRAIT_WITH_GLASSES_URL: '',
+    
+    // 8. Imagem Destaque do Personagem (Na Tela de Seleção do Menu)
+    MENU_CHARACTER_IMG_URL: ''
 };
 // ==============================================================================
 
@@ -58,6 +67,7 @@ const state = {
 const sprites = {
     map: new Image(),
     player: new Image(),
+    playerGlasses: new Image(),
     glasses: new Image(),
     cloth: new Image()
 };
@@ -66,16 +76,25 @@ const sprites = {
 function loadSprites() {
     if (CONFIG_ASSETS.MAP_BG_URL) sprites.map.src = CONFIG_ASSETS.MAP_BG_URL;
     if (CONFIG_ASSETS.PLAYER_SPRITE_URL) sprites.player.src = CONFIG_ASSETS.PLAYER_SPRITE_URL;
+    if (CONFIG_ASSETS.PLAYER_WITH_GLASSES_SPRITE_URL) sprites.playerGlasses.src = CONFIG_ASSETS.PLAYER_WITH_GLASSES_SPRITE_URL;
     if (CONFIG_ASSETS.GLASSES_SPRITE_URL) sprites.glasses.src = CONFIG_ASSETS.GLASSES_SPRITE_URL;
     if (CONFIG_ASSETS.CLOTH_SPRITE_URL) sprites.cloth.src = CONFIG_ASSETS.CLOTH_SPRITE_URL;
     
-    // Configura também o portrait no DOM
+    // Configura o retrato no inventário
     if (CONFIG_ASSETS.PLAYER_PORTRAIT_URL) {
         ui.inv.portrait.src = CONFIG_ASSETS.PLAYER_PORTRAIT_URL;
     } else {
-        // Fallback visual no DOM
         ui.inv.portrait.style.display = 'none';
-        ui.inv.portrait.parentElement.style.backgroundColor = '#555';
+        ui.inv.portrait.parentElement.style.backgroundColor = '#555'; // placeholder cinza
+    }
+
+    // Configura a imagem do personagem na tela Inicial (Menu)
+    const menuCharImg = document.getElementById('menu-char-img');
+    if (CONFIG_ASSETS.MENU_CHARACTER_IMG_URL) {
+        menuCharImg.src = CONFIG_ASSETS.MENU_CHARACTER_IMG_URL;
+    } else {
+        menuCharImg.style.display = 'none';
+        menuCharImg.parentElement.style.backgroundColor = 'red'; // placeholder vermelho
     }
 }
 
@@ -155,7 +174,7 @@ function updateUI() {
     ui.debug.glasses.innerText = items.glasses.collected ? 'Sim' : 'Não';
     ui.debug.cloth.innerText = items.cloth.collected ? 'Sim' : 'Não';
 
-    // Modal Inventário
+    // Modal Inventário: Atualizando Texto
     if (items.glasses.collected) {
         ui.inv.glasses.classList.add('collected');
         ui.inv.glasses.classList.remove('not-collected');
@@ -163,6 +182,12 @@ function updateUI() {
     if (items.cloth.collected) {
         ui.inv.cloth.classList.add('collected');
         ui.inv.cloth.classList.remove('not-collected');
+    }
+
+    // Altera o portrait do inventário caso tenha o óculos! (isso no menu tb)
+    if (items.glasses.collected && CONFIG_ASSETS.PLAYER_PORTRAIT_WITH_GLASSES_URL) {
+        ui.inv.portrait.style.display = 'block';
+        ui.inv.portrait.src = CONFIG_ASSETS.PLAYER_PORTRAIT_WITH_GLASSES_URL;
     }
 }
 
@@ -256,8 +281,9 @@ function draw() {
         drawSpriteOrRect(sprites.cloth, items.cloth.x, items.cloth.y, items.cloth.width, items.cloth.height, items.cloth.color);
     }
 
-    // 3. Desenha Jogador
-    drawSpriteOrRect(sprites.player, player.x, player.y, player.width, player.height, 'red');
+    // 3. Desenha Jogador (Altera visualmente se estiver de óculos)
+    let spriteAtualPlayer = items.glasses.collected ? sprites.playerGlasses : sprites.player;
+    drawSpriteOrRect(spriteAtualPlayer, player.x, player.y, player.width, player.height, 'red');
 }
 
 // ==============================================================================

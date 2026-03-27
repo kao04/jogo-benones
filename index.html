@@ -18,10 +18,18 @@
             <div class="menu-box">
                 <h1>Seleção de Protagonista</h1>
                 <p>Escolha seu personagem para começar.</p>
-                <!-- Comentário sobre a foto do menu -->
-                <!-- A imagem usada aqui também usa a variável do JS se fizermos dinamicamente, mas vamos criar o botão estático na UI -->
+                
+                <div class="character-select-container">
+                    <div class="char-card selected">
+                        <div class="char-img-box">
+                            <img id="menu-char-img" src="" alt="Personagem">
+                        </div>
+                        <h3>Protagonista</h3>
+                    </div>
+                </div>
+
                 <div class="character-select">
-                    <button id="btn-start" class="btn">Selecionar Jogador Padrão</button>
+                    <button id="btn-start" class="btn">Selecionar e Iniciar</button>
                 </div>
             </div>
         </div>
