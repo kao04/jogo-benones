@@ -97,18 +97,24 @@ const items = {
 
 // ==============================================================================
 // CONTROLES DE INPUT (TECLADO)
-// ==============================================================================
 window.addEventListener('keydown', (e) => {
     state.keys[e.key] = true;
+    if (e.code) state.keys[e.code] = true; // Suporte extra para teclados diferentes
+    
+    // Evita scroll da página com as setas
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+        e.preventDefault();
+    }
     
     // Ativa/Desativa o inventário ao pressionar 'E' / 'e'
-    if ((e.key === 'e' || e.key === 'E') && state.current !== 'MENU') {
+    if ((e.key === 'e' || e.key === 'E' || e.code === 'KeyE') && state.current !== 'MENU') {
         toggleInventory();
     }
 });
 
 window.addEventListener('keyup', (e) => {
     state.keys[e.key] = false;
+    if (e.code) state.keys[e.code] = false;
 });
 
 // ==============================================================================
@@ -178,10 +184,10 @@ function update() {
     let dx = 0;
     let dy = 0;
 
-    if (state.keys['ArrowUp'] || state.keys['w'] || state.keys['W']) dy -= player.speed;
-    if (state.keys['ArrowDown'] || state.keys['s'] || state.keys['S']) dy += player.speed;
-    if (state.keys['ArrowLeft'] || state.keys['a'] || state.keys['A']) dx -= player.speed;
-    if (state.keys['ArrowRight'] || state.keys['d'] || state.keys['D']) dx += player.speed;
+    if (state.keys['ArrowUp'] || state.keys['w'] || state.keys['W'] || state.keys['KeyW']) dy -= player.speed;
+    if (state.keys['ArrowDown'] || state.keys['s'] || state.keys['S'] || state.keys['KeyS']) dy += player.speed;
+    if (state.keys['ArrowLeft'] || state.keys['a'] || state.keys['A'] || state.keys['KeyA']) dx -= player.speed;
+    if (state.keys['ArrowRight'] || state.keys['d'] || state.keys['D'] || state.keys['KeyD']) dx += player.speed;
 
     // Normaliza velocidade se andando na diagonal (+/-)
     if (dx !== 0 && dy !== 0) {
