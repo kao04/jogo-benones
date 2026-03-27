@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minijogo Isométrico</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <!-- Container Principal (Câmera Estática) -->
+    <div id="game-container">
+        <!-- Canvas onde o jogo é desenhado -->
+        <canvas id="game-canvas" width="800" height="600"></canvas>
+
+        <!-- Menu de Sobreposição (Seleção de Personagem) -->
+        <div id="menu-overlay" class="overlay">
+            <div class="menu-box">
+                <h1>Seleção de Protagonista</h1>
+                <p>Escolha seu personagem para começar.</p>
+                <!-- Comentário sobre a foto do menu -->
+                <!-- A imagem usada aqui também usa a variável do JS se fizermos dinamicamente, mas vamos criar o botão estático na UI -->
+                <div class="character-select">
+                    <button id="btn-start" class="btn">Selecionar Jogador Padrão</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HUD de Debug (sempre visível durante o jogo) -->
+        <div id="debug-hud" class="hidden">
+            <p><strong>Debug Info</strong></p>
+            <p>Posição X: <span id="debug-x">0</span></p>
+            <p>Posição Y: <span id="debug-y">0</span></p>
+            <p>Óculos Coletado: <span id="debug-glasses">Não</span></p>
+            <p>Pano Coletado: <span id="debug-cloth">Não</span></p>
+        </div>
+
+        <!-- Modal de Inventário ('E') -->
+        <div id="inventory-modal" class="overlay hidden">
+            <div class="inventory-box">
+                <h2>Inventário</h2>
+                
+                <div class="inventory-content">
+                    <div class="portrait-container">
+                        <!-- Imagem do retrato do personagem. A URL será definida via JS. -->
+                        <img id="inv-portrait" src="" alt="Retrato do Personagem">
+                    </div>
+                    
+                    <div class="items-container">
+                        <h3>Itens Coletados:</h3>
+                        <ul id="inv-items-list">
+                            <li id="inv-item-glasses" class="inv-item not-collected">Óculos</li>
+                            <li id="inv-item-cloth" class="inv-item not-collected">Pano</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p class="hint">Pressione 'E' novamente para fechar.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script principal -->
+    <script src="script.js"></script>
+</body>
+</html>
