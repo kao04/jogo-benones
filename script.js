@@ -10,10 +10,10 @@ const CONFIG_ASSETS = {
     MAP_BG_URL: '',
     
     // 2. Sprite do Jogador (Normal)
-    PLAYER_SPRITE_URL: '',
+    PLAYER_SPRITE_URL: 'assets/prota.png',
     
     // 3. Sprite do Jogador (COM ÓCULOS) - Muda automaticamente quando coletar!
-    PLAYER_WITH_GLASSES_SPRITE_URL: '',
+    PLAYER_WITH_GLASSES_SPRITE_URL: 'assets/protaoculos.png',
     
     // 4. Sprite do Item Óculos (Pequena imagem de óculos para ser coletada)
     GLASSES_SPRITE_URL: '',
@@ -22,10 +22,10 @@ const CONFIG_ASSETS = {
     CLOTH_SPRITE_URL: '',
     
     // 6. Foto de Perfil do Personagem (Inventário Normal)
-    PLAYER_PORTRAIT_URL: '',
+    PLAYER_PORTRAIT_URL: 'assets/prota.png',
     
     // 7. Foto de Perfil do Personagem (Inventário COM ÓCULOS)
-    PLAYER_PORTRAIT_WITH_GLASSES_URL: '',
+    PLAYER_PORTRAIT_WITH_GLASSES_URL: 'assets/protaoculos.png',
     
     // 8. Imagem Destaque do Personagem (Na Tela de Seleção do Menu)
     MENU_CHARACTER_IMG_URL: ''
@@ -90,11 +90,13 @@ function loadSprites() {
 
     // Configura a imagem do personagem na tela Inicial (Menu)
     const menuCharImg = document.getElementById('menu-char-img');
-    if (CONFIG_ASSETS.MENU_CHARACTER_IMG_URL) {
-        menuCharImg.src = CONFIG_ASSETS.MENU_CHARACTER_IMG_URL;
-    } else {
-        menuCharImg.style.display = 'none';
-        menuCharImg.parentElement.style.backgroundColor = 'red'; // placeholder vermelho
+    if (menuCharImg) {
+        if (CONFIG_ASSETS.MENU_CHARACTER_IMG_URL) {
+            menuCharImg.src = CONFIG_ASSETS.MENU_CHARACTER_IMG_URL;
+        } else {
+            menuCharImg.style.display = 'none';
+            menuCharImg.parentElement.style.backgroundColor = 'red'; // placeholder vermelho
+        }
     }
 }
 
@@ -137,8 +139,39 @@ window.addEventListener('keyup', (e) => {
 });
 
 // ==============================================================================
-// LÓGICA DO MENU
+// LÓGICA DO MENU E SELEÇÃO
 // ==============================================================================
+const charCards = document.querySelectorAll('.char-card');
+let selectedChar = 'prota';
+
+charCards.forEach(card => {
+    card.addEventListener('click', () => {
+        // Remove a seleção dos outros
+        charCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        
+        selectedChar = card.dataset.char;
+
+        // Ao clicar, muda as imagens de jogo
+        if (selectedChar === 'prota') {
+            CONFIG_ASSETS.PLAYER_SPRITE_URL = 'assets/prota.png';
+            CONFIG_ASSETS.PLAYER_WITH_GLASSES_SPRITE_URL = 'assets/protaoculos.png';
+            CONFIG_ASSETS.PLAYER_PORTRAIT_URL = 'assets/prota.png';
+            CONFIG_ASSETS.PLAYER_PORTRAIT_WITH_GLASSES_URL = 'assets/protaoculos.png';
+        } else if (selectedChar === 'menina1') {
+            CONFIG_ASSETS.PLAYER_SPRITE_URL = 'assets/menina1.png';
+            CONFIG_ASSETS.PLAYER_WITH_GLASSES_SPRITE_URL = 'assets/menina1.png';
+            CONFIG_ASSETS.PLAYER_PORTRAIT_URL = 'assets/menina1.png';
+            CONFIG_ASSETS.PLAYER_PORTRAIT_WITH_GLASSES_URL = 'assets/menina1.png';
+        } else if (selectedChar === 'menina2') {
+            CONFIG_ASSETS.PLAYER_SPRITE_URL = 'assets/menina2.png';
+            CONFIG_ASSETS.PLAYER_WITH_GLASSES_SPRITE_URL = 'assets/menina2.png';
+            CONFIG_ASSETS.PLAYER_PORTRAIT_URL = 'assets/menina2.png';
+            CONFIG_ASSETS.PLAYER_PORTRAIT_WITH_GLASSES_URL = 'assets/menina2.png';
+        }
+    });
+});
+
 ui.btnStart.addEventListener('click', () => {
     // Esconder o menu overlay
     ui.menu.classList.add('hidden');
@@ -146,6 +179,9 @@ ui.btnStart.addEventListener('click', () => {
     ui.debugHud.classList.remove('hidden');
     // Mudar estado para rodar o jogo
     state.current = 'PLAYING';
+    
+    // Recarrega os sprites para garantir os assets certos pro personagem escolhido!
+    loadSprites();
     
     // Inicia a execução do Game Loop
     requestAnimationFrame(gameLoop);
